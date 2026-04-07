@@ -2,8 +2,10 @@ package ui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.List;
@@ -73,7 +75,9 @@ public class DepartmentCrudFrame extends JFrame {
         topPanel.add(formPanel, BorderLayout.CENTER);
         topPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-        add(topPanel, BorderLayout.NORTH);
+        JPanel centerPanel = new JPanel(new GridBagLayout());
+        centerPanel.add(topPanel);
+        add(centerPanel, BorderLayout.CENTER);
 
         tableModel = new DefaultTableModel(new String[] { "Department ID", "Department Name", "Update", "Delete" }, 0) {
             @Override
@@ -89,8 +93,9 @@ public class DepartmentCrudFrame extends JFrame {
 
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBorder(BorderFactory.createTitledBorder("Departments"));
+        scrollPane.setPreferredSize(new Dimension(760, 220));
 
-        add(scrollPane, BorderLayout.CENTER);
+        add(scrollPane, BorderLayout.SOUTH);
 
         createButton.addActionListener(e -> createDepartment());
         clearButton.addActionListener(e -> clearInputs());

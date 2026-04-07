@@ -2,8 +2,10 @@ package ui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.List;
@@ -91,7 +93,10 @@ public class StudentCrudFrame extends JFrame {
         JPanel topPanel = new JPanel(new BorderLayout(8, 8));
         topPanel.add(formPanel, BorderLayout.CENTER);
         topPanel.add(buttonPanel, BorderLayout.SOUTH);
-        add(topPanel, BorderLayout.NORTH);
+
+        JPanel centerPanel = new JPanel(new GridBagLayout());
+        centerPanel.add(topPanel);
+        add(centerPanel, BorderLayout.CENTER);
 
         tableModel = new DefaultTableModel(new String[] { "ID", "Name", "Email", "Age", "Address", "Phone", "Department", "Update", "Delete" }, 0) {
             @Override
@@ -105,7 +110,9 @@ public class StudentCrudFrame extends JFrame {
         configureActionColumn(7, "Update", row -> editStudentFromRow(row));
         configureActionColumn(8, "Delete", row -> deleteStudentFromRow(row));
 
-        add(new JScrollPane(table), BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setPreferredSize(new Dimension(1060, 250));
+        add(scrollPane, BorderLayout.SOUTH);
 
         createButton.addActionListener(e -> createStudent());
         clearButton.addActionListener(e -> clearInputs());
