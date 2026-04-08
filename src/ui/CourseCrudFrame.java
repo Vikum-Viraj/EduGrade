@@ -36,7 +36,6 @@ import model.Department;
 public class CourseCrudFrame extends JFrame {
     private final CourseDao courseDao;
 
-    private final JTextField idField;
     private final JTextField courseNameField;
     private final JTextField creditsField;
     private final JComboBox<Department> departmentComboBox;
@@ -52,16 +51,13 @@ public class CourseCrudFrame extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
-        JPanel formPanel = new JPanel(new GridLayout(4, 2, 8, 8));
+        JPanel formPanel = new JPanel(new GridLayout(3, 2, 8, 8));
         formPanel.setBorder(BorderFactory.createTitledBorder("Course Details"));
 
-        idField = new JTextField();
         courseNameField = new JTextField();
         creditsField = new JTextField();
         departmentComboBox = new JComboBox<>();
 
-        formPanel.add(new JLabel("Course ID", SwingConstants.RIGHT));
-        formPanel.add(idField);
         formPanel.add(new JLabel("Course Name", SwingConstants.RIGHT));
         formPanel.add(courseNameField);
         formPanel.add(new JLabel("Credits", SwingConstants.RIGHT));
@@ -122,7 +118,6 @@ public class CourseCrudFrame extends JFrame {
         try {
             int newId = courseDao.createCourse(course);
             showInfo("Course created with ID: " + newId);
-            idField.setText(String.valueOf(newId));
             loadCourses();
         } catch (SQLException ex) {
             showError(ex);
@@ -277,11 +272,6 @@ public class CourseCrudFrame extends JFrame {
     }
 
     private Course collectCourseFromForm(boolean requireId) {
-        Integer id = requireId ? parseId() : null;
-        if (requireId && id == null) {
-            return null;
-        }
-
         String courseName = courseNameField.getText().trim();
         if (courseName.isEmpty()) {
             showWarning("Course name is required.");
@@ -301,9 +291,6 @@ public class CourseCrudFrame extends JFrame {
         }
 
         Course course = new Course();
-        if (id != null) {
-            course.setCourseId(id);
-        }
         course.setCourseName(courseName);
         course.setCredits(credits);
 
@@ -319,23 +306,7 @@ public class CourseCrudFrame extends JFrame {
         return course;
     }
 
-    private Integer parseId() {
-        String idText = idField.getText().trim();
-        if (idText.isEmpty()) {
-            showWarning("Course ID is required for this action.");
-            return null;
-        }
-
-        try {
-            return Integer.parseInt(idText);
-        } catch (NumberFormatException ex) {
-            showWarning("Course ID must be a valid integer.");
-            return null;
-        }
-    }
-
     private void clearInputs() {
-        idField.setText("");
         courseNameField.setText("");
         creditsField.setText("");
         if (departmentComboBox.getItemCount() > 0) {

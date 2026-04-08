@@ -31,7 +31,7 @@ public class DashboardFrame extends JFrame {
         headerPanel.add(titleLabel, BorderLayout.CENTER);
         headerPanel.add(subtitleLabel, BorderLayout.SOUTH);
 
-        JPanel centerPanel = new JPanel(new GridLayout(2, 2, 18, 18));
+        JPanel centerPanel = new JPanel(new GridLayout(2, 3, 18, 18));
         centerPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
         JButton departmentsButton = new JButton("Departments");
@@ -50,10 +50,15 @@ public class DashboardFrame extends JFrame {
         coursesButton.setFont(new Font("SansSerif", Font.BOLD, 20));
         coursesButton.addActionListener(e -> new CourseCrudFrame().setVisible(true));
 
+        JButton enrollmentsButton = new JButton("Enrollments");
+        enrollmentsButton.setFont(new Font("SansSerif", Font.BOLD, 20));
+        enrollmentsButton.addActionListener(e -> new EnrollmentCrudFrame().setVisible(true));
+
         centerPanel.add(departmentsButton);
         centerPanel.add(studentsButton);
         centerPanel.add(lecturersButton);
         centerPanel.add(coursesButton);
+        centerPanel.add(enrollmentsButton);
 
         add(headerPanel, BorderLayout.NORTH);
         add(centerPanel, BorderLayout.CENTER);

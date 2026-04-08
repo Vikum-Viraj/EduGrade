@@ -57,4 +57,9 @@ public class Course {
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
     }
+
+    @Override
+    public String toString() {
+        return courseId == 0 ? courseName : courseId + " - " + courseName;
+    }
 }

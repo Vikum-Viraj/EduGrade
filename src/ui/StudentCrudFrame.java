@@ -36,7 +36,6 @@ import model.Student;
 public class StudentCrudFrame extends JFrame {
     private final StudentDao studentDao;
 
-    private final JTextField idField;
     private final JTextField nameField;
     private final JTextField emailField;
     private final JTextField ageField;
@@ -55,10 +54,9 @@ public class StudentCrudFrame extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
-        JPanel formPanel = new JPanel(new GridLayout(7, 2, 8, 8));
+        JPanel formPanel = new JPanel(new GridLayout(6, 2, 8, 8));
         formPanel.setBorder(BorderFactory.createTitledBorder("Student Details"));
 
-        idField = new JTextField();
         nameField = new JTextField();
         emailField = new JTextField();
         ageField = new JTextField();
@@ -66,8 +64,6 @@ public class StudentCrudFrame extends JFrame {
         phoneField = new JTextField();
         departmentComboBox = new JComboBox<>();
 
-        formPanel.add(new JLabel("Student ID", SwingConstants.RIGHT));
-        formPanel.add(idField);
         formPanel.add(new JLabel("Name", SwingConstants.RIGHT));
         formPanel.add(nameField);
         formPanel.add(new JLabel("Email", SwingConstants.RIGHT));
@@ -134,27 +130,6 @@ public class StudentCrudFrame extends JFrame {
         try {
             int newId = studentDao.createStudent(student);
             showInfo("Student created with ID: " + newId);
-            idField.setText(String.valueOf(newId));
-            loadStudents();
-        } catch (SQLException ex) {
-            showError(ex);
-        }
-    }
-
-    private void updateStudent() {
-        Student student = collectStudentFromForm(true);
-        if (student == null) {
-            return;
-        }
-
-        try {
-            boolean updated = studentDao.updateStudent(student);
-            if (!updated) {
-                showWarning("No student updated. Check the ID.");
-                return;
-            }
-
-            showInfo("Student updated.");
             loadStudents();
         } catch (SQLException ex) {
             showError(ex);
@@ -361,11 +336,6 @@ public class StudentCrudFrame extends JFrame {
     }
 
     private Student collectStudentFromForm(boolean requireId) {
-        Integer id = requireId ? parseId() : null;
-        if (requireId && id == null) {
-            return null;
-        }
-
         String name = nameField.getText().trim();
         if (name.isEmpty()) {
             showWarning("Name is required.");
@@ -373,9 +343,6 @@ public class StudentCrudFrame extends JFrame {
         }
 
         Student student = new Student();
-        if (id != null) {
-            student.setStudentId(id);
-        }
         student.setName(name);
         student.setEmail(emptyToNull(emailField.getText()));
         student.setAge(emptyToNull(ageField.getText()));
@@ -395,7 +362,6 @@ public class StudentCrudFrame extends JFrame {
     }
 
     private void populateForm(Student student) {
-        idField.setText(String.valueOf(student.getStudentId()));
         nameField.setText(student.getName());
         emailField.setText(student.getEmail() == null ? "" : student.getEmail());
         ageField.setText(student.getAge() == null ? "" : student.getAge());
@@ -418,28 +384,12 @@ public class StudentCrudFrame extends JFrame {
         departmentComboBox.setSelectedIndex(0);
     }
 
-    private Integer parseId() {
-        String idText = idField.getText().trim();
-        if (idText.isEmpty()) {
-            showWarning("Student ID is required for this action.");
-            return null;
-        }
-
-        try {
-            return Integer.parseInt(idText);
-        } catch (NumberFormatException ex) {
-            showWarning("Student ID must be a valid integer.");
-            return null;
-        }
-    }
-
     private String emptyToNull(String value) {
         String trimmed = value == null ? "" : value.trim();
         return trimmed.isEmpty() ? null : trimmed;
     }
 
     private void clearInputs() {
-        idField.setText("");
         nameField.setText("");
         emailField.setText("");
         ageField.setText("");

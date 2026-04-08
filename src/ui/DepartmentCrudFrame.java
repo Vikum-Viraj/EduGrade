@@ -34,7 +34,6 @@ import model.Department;
 public class DepartmentCrudFrame extends JFrame {
     private final DepartmentDao departmentDao;
 
-    private final JTextField idField;
     private final JTextField nameField;
     private final DefaultTableModel tableModel;
     private final JTable table;
@@ -48,17 +47,12 @@ public class DepartmentCrudFrame extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
-        JPanel formPanel = new JPanel(new GridLayout(2, 2, 8, 8));
+        JPanel formPanel = new JPanel(new GridLayout(1, 2, 8, 8));
         formPanel.setBorder(BorderFactory.createTitledBorder("Department Details"));
-
-        JLabel idLabel = new JLabel("Department ID", SwingConstants.RIGHT);
-        idField = new JTextField();
 
         JLabel nameLabel = new JLabel("Department Name", SwingConstants.RIGHT);
         nameField = new JTextField();
 
-        formPanel.add(idLabel);
-        formPanel.add(idField);
         formPanel.add(nameLabel);
         formPanel.add(nameField);
 
@@ -115,33 +109,6 @@ public class DepartmentCrudFrame extends JFrame {
         try {
             int newId = departmentDao.createDepartment(name);
             showInfo("Department created with ID: " + newId);
-            idField.setText(String.valueOf(newId));
-            loadDepartments();
-        } catch (SQLException ex) {
-            showError(ex);
-        }
-    }
-
-    private void updateDepartment() {
-        Integer id = parseId();
-        if (id == null) {
-            return;
-        }
-
-        String name = nameField.getText().trim();
-        if (name.isEmpty()) {
-            showWarning("Department name is required.");
-            return;
-        }
-
-        try {
-            boolean updated = departmentDao.updateDepartment(id, name);
-            if (!updated) {
-                showWarning("No department updated. Check the ID.");
-                return;
-            }
-
-            showInfo("Department updated.");
             loadDepartments();
         } catch (SQLException ex) {
             showError(ex);
@@ -276,23 +243,7 @@ public class DepartmentCrudFrame extends JFrame {
         }
     }
 
-    private Integer parseId() {
-        String idText = idField.getText().trim();
-        if (idText.isEmpty()) {
-            showWarning("Department ID is required for this action.");
-            return null;
-        }
-
-        try {
-            return Integer.parseInt(idText);
-        } catch (NumberFormatException ex) {
-            showWarning("Department ID must be a valid integer.");
-            return null;
-        }
-    }
-
     private void clearInputs() {
-        idField.setText("");
         nameField.setText("");
     }
 

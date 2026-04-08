@@ -36,7 +36,6 @@ import model.Lecturer;
 public class LecturerCrudFrame extends JFrame {
     private final LecturerDao lecturerDao;
 
-    private final JTextField idField;
     private final JTextField nameField;
     private final JTextField emailField;
     private final JTextField ageField;
@@ -55,10 +54,9 @@ public class LecturerCrudFrame extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
-        JPanel formPanel = new JPanel(new GridLayout(7, 2, 8, 8));
+        JPanel formPanel = new JPanel(new GridLayout(6, 2, 8, 8));
         formPanel.setBorder(BorderFactory.createTitledBorder("Lecturer Details"));
 
-        idField = new JTextField();
         nameField = new JTextField();
         emailField = new JTextField();
         ageField = new JTextField();
@@ -66,8 +64,6 @@ public class LecturerCrudFrame extends JFrame {
         phoneField = new JTextField();
         departmentComboBox = new JComboBox<>();
 
-        formPanel.add(new JLabel("Lecturer ID", SwingConstants.RIGHT));
-        formPanel.add(idField);
         formPanel.add(new JLabel("Name", SwingConstants.RIGHT));
         formPanel.add(nameField);
         formPanel.add(new JLabel("Email", SwingConstants.RIGHT));
@@ -134,7 +130,6 @@ public class LecturerCrudFrame extends JFrame {
         try {
             int newId = lecturerDao.createLecturer(lecturer);
             showInfo("Lecturer created with ID: " + newId);
-            idField.setText(String.valueOf(newId));
             loadLecturers();
         } catch (SQLException ex) {
             showError(ex);
@@ -296,10 +291,6 @@ public class LecturerCrudFrame extends JFrame {
     }
 
     private Lecturer collectLecturerFromForm(boolean requireId) {
-        Integer id = requireId ? parseId() : null;
-        if (requireId && id == null) {
-            return null;
-        }
 
         String name = nameField.getText().trim();
         if (name.isEmpty()) {
@@ -308,9 +299,6 @@ public class LecturerCrudFrame extends JFrame {
         }
 
         Lecturer lecturer = new Lecturer();
-        if (id != null) {
-            lecturer.setLecturerId(id);
-        }
         lecturer.setName(name);
         lecturer.setEmail(emptyToNull(emailField.getText()));
         lecturer.setAge(emptyToNull(ageField.getText()));
@@ -329,28 +317,12 @@ public class LecturerCrudFrame extends JFrame {
         return lecturer;
     }
 
-    private Integer parseId() {
-        String idText = idField.getText().trim();
-        if (idText.isEmpty()) {
-            showWarning("Lecturer ID is required for this action.");
-            return null;
-        }
-
-        try {
-            return Integer.parseInt(idText);
-        } catch (NumberFormatException ex) {
-            showWarning("Lecturer ID must be a valid integer.");
-            return null;
-        }
-    }
-
     private String emptyToNull(String value) {
         String trimmed = value == null ? "" : value.trim();
         return trimmed.isEmpty() ? null : trimmed;
     }
 
     private void clearInputs() {
-        idField.setText("");
         nameField.setText("");
         emailField.setText("");
         ageField.setText("");

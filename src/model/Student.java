@@ -88,4 +88,9 @@ public class Student {
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
     }
+
+    @Override
+    public String toString() {
+        return studentId == 0 ? name : studentId + " - " + name;
+    }
 }
