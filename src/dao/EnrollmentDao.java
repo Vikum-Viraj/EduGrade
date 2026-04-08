@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import config.DBConnection;
 import model.Course;
 import model.Department;
 import model.Enrollment;

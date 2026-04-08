@@ -1,4 +1,5 @@
 D:\React_Projects\PacificCode\Edugrade\src\App.java
+D:\React_Projects\PacificCode\Edugrade\src\config\DBConnection.java
 D:\React_Projects\PacificCode\Edugrade\src\controller\CourseController.java
 D:\React_Projects\PacificCode\Edugrade\src\controller\DashboardController.java
 D:\React_Projects\PacificCode\Edugrade\src\controller\DepartmentController.java
@@ -6,7 +7,6 @@ D:\React_Projects\PacificCode\Edugrade\src\controller\EnrollmentController.java
 D:\React_Projects\PacificCode\Edugrade\src\controller\LecturerController.java
 D:\React_Projects\PacificCode\Edugrade\src\controller\StudentController.java
 D:\React_Projects\PacificCode\Edugrade\src\dao\CourseDao.java
-D:\React_Projects\PacificCode\Edugrade\src\dao\DBConnection.java
 D:\React_Projects\PacificCode\Edugrade\src\dao\DepartmentDao.java
 D:\React_Projects\PacificCode\Edugrade\src\dao\EnrollmentDao.java
 D:\React_Projects\PacificCode\Edugrade\src\dao\LecturerDao.java
