@@ -48,7 +48,7 @@ public class LecturerCrudFrame extends JFrame {
     public LecturerCrudFrame(LecturerController controller) {
         this.controller = controller;
 
-        setTitle("Lecturer CRUD");
+        setTitle("Lecturer Management");
         setSize(1100, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

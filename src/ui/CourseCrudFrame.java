@@ -45,7 +45,7 @@ public class CourseCrudFrame extends JFrame {
     public CourseCrudFrame(CourseController controller) {
         this.controller = controller;
 
-        setTitle("Course CRUD");
+        setTitle("Course Management");
         setSize(1050, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

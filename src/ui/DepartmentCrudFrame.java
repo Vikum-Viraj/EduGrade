@@ -41,7 +41,7 @@ public class DepartmentCrudFrame extends JFrame {
     public DepartmentCrudFrame(DepartmentController controller) {
         this.controller = controller;
 
-        setTitle("Department CRUD");
+        setTitle("Department Management");
         setSize(780, 500);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
