@@ -29,12 +29,12 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-import dao.StudentDao;
+import controller.StudentController;
 import model.Department;
 import model.Student;
 
 public class StudentCrudFrame extends JFrame {
-    private final StudentDao studentDao;
+    private final StudentController controller;
 
     private final JTextField nameField;
     private final JTextField emailField;
@@ -45,8 +45,8 @@ public class StudentCrudFrame extends JFrame {
     private final DefaultTableModel tableModel;
     private final JTable table;
 
-    public StudentCrudFrame() {
-        this.studentDao = new StudentDao();
+    public StudentCrudFrame(StudentController controller) {
+        this.controller = controller;
 
         setTitle("Student CRUD");
         setSize(1100, 600);
@@ -128,7 +128,7 @@ public class StudentCrudFrame extends JFrame {
         }
 
         try {
-            int newId = studentDao.createStudent(student);
+            int newId = controller.createStudent(student);
             showInfo("Student created with ID: " + newId);
             loadStudents();
         } catch (SQLException ex) {
@@ -138,7 +138,7 @@ public class StudentCrudFrame extends JFrame {
 
     private void loadStudents() {
         try {
-            List<Student> students = studentDao.getAllStudents();
+            List<Student> students = controller.getAllStudents();
             tableModel.setRowCount(0);
             for (Student student : students) {
                 tableModel.addRow(new Object[] {
@@ -161,7 +161,7 @@ public class StudentCrudFrame extends JFrame {
     private void editStudentFromRow(int row) {
         try {
             int id = getStudentIdAtRow(row);
-            Student student = studentDao.getStudentById(id);
+            Student student = controller.getStudentById(id);
             if (student == null) {
                 showWarning("Student not found for ID: " + id);
                 return;
@@ -229,7 +229,7 @@ public class StudentCrudFrame extends JFrame {
                 updatedStudent.setDepartmentName(null);
             }
 
-            boolean updated = studentDao.updateStudent(updatedStudent);
+            boolean updated = controller.updateStudent(updatedStudent);
             if (!updated) {
                 showWarning("No student updated. Check the ID.");
                 return;
@@ -253,7 +253,7 @@ public class StudentCrudFrame extends JFrame {
                 return;
             }
 
-            boolean deleted = studentDao.deleteStudent(id);
+            boolean deleted = controller.deleteStudent(id);
             if (!deleted) {
                 showWarning("No student deleted. Check the ID.");
                 return;
@@ -319,7 +319,7 @@ public class StudentCrudFrame extends JFrame {
 
     private void loadDepartments() {
         try {
-            List<Department> departments = studentDao.getDepartments();
+            List<Department> departments = controller.getDepartments();
             DefaultComboBoxModel<Department> model = new DefaultComboBoxModel<>();
             model.addElement(nullDepartmentOption());
             for (Department department : departments) {

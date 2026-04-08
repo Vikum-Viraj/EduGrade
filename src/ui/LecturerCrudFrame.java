@@ -29,12 +29,12 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import dao.LecturerDao;
+import controller.LecturerController;
 import model.Department;
 import model.Lecturer;
 
 public class LecturerCrudFrame extends JFrame {
-    private final LecturerDao lecturerDao;
+    private final LecturerController controller;
 
     private final JTextField nameField;
     private final JTextField emailField;
@@ -45,8 +45,8 @@ public class LecturerCrudFrame extends JFrame {
     private final DefaultTableModel tableModel;
     private final JTable table;
 
-    public LecturerCrudFrame() {
-        this.lecturerDao = new LecturerDao();
+    public LecturerCrudFrame(LecturerController controller) {
+        this.controller = controller;
 
         setTitle("Lecturer CRUD");
         setSize(1100, 600);
@@ -128,7 +128,7 @@ public class LecturerCrudFrame extends JFrame {
         }
 
         try {
-            int newId = lecturerDao.createLecturer(lecturer);
+            int newId = controller.createLecturer(lecturer);
             showInfo("Lecturer created with ID: " + newId);
             loadLecturers();
         } catch (SQLException ex) {
@@ -138,7 +138,7 @@ public class LecturerCrudFrame extends JFrame {
 
     private void loadLecturers() {
         try {
-            List<Lecturer> lecturers = lecturerDao.getAllLecturers();
+            List<Lecturer> lecturers = controller.getAllLecturers();
             tableModel.setRowCount(0);
             for (Lecturer lecturer : lecturers) {
                 tableModel.addRow(new Object[] {
@@ -161,7 +161,7 @@ public class LecturerCrudFrame extends JFrame {
     private void editLecturerFromRow(int row) {
         try {
             int id = getLecturerIdAtRow(row);
-            Lecturer lecturer = lecturerDao.getLecturerById(id);
+            Lecturer lecturer = controller.getLecturerById(id);
             if (lecturer == null) {
                 showWarning("Lecturer not found for ID: " + id);
                 return;
@@ -229,7 +229,7 @@ public class LecturerCrudFrame extends JFrame {
                 updatedLecturer.setDepartmentName(null);
             }
 
-            boolean updated = lecturerDao.updateLecturer(updatedLecturer);
+            boolean updated = controller.updateLecturer(updatedLecturer);
             if (!updated) {
                 showWarning("No lecturer updated. Check the ID.");
                 return;
@@ -253,7 +253,7 @@ public class LecturerCrudFrame extends JFrame {
                 return;
             }
 
-            boolean deleted = lecturerDao.deleteLecturer(id);
+            boolean deleted = controller.deleteLecturer(id);
             if (!deleted) {
                 showWarning("No lecturer deleted. Check the ID.");
                 return;
@@ -274,7 +274,7 @@ public class LecturerCrudFrame extends JFrame {
 
     private void loadDepartments() {
         try {
-            List<Department> departments = lecturerDao.getDepartments();
+            List<Department> departments = controller.getDepartments();
             DefaultComboBoxModel<Department> model = new DefaultComboBoxModel<>();
             model.addElement(nullDepartmentOption());
             for (Department department : departments) {

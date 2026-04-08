@@ -29,12 +29,12 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import dao.CourseDao;
+import controller.CourseController;
 import model.Course;
 import model.Department;
 
 public class CourseCrudFrame extends JFrame {
-    private final CourseDao courseDao;
+    private final CourseController controller;
 
     private final JTextField courseNameField;
     private final JTextField creditsField;
@@ -42,8 +42,8 @@ public class CourseCrudFrame extends JFrame {
     private final DefaultTableModel tableModel;
     private final JTable table;
 
-    public CourseCrudFrame() {
-        this.courseDao = new CourseDao();
+    public CourseCrudFrame(CourseController controller) {
+        this.controller = controller;
 
         setTitle("Course CRUD");
         setSize(1050, 600);
@@ -116,7 +116,7 @@ public class CourseCrudFrame extends JFrame {
         }
 
         try {
-            int newId = courseDao.createCourse(course);
+            int newId = controller.createCourse(course);
             showInfo("Course created with ID: " + newId);
             loadCourses();
         } catch (SQLException ex) {
@@ -126,7 +126,7 @@ public class CourseCrudFrame extends JFrame {
 
     private void loadCourses() {
         try {
-            List<Course> courses = courseDao.getAllCourses();
+            List<Course> courses = controller.getAllCourses();
             tableModel.setRowCount(0);
             for (Course course : courses) {
                 tableModel.addRow(new Object[] {
@@ -146,7 +146,7 @@ public class CourseCrudFrame extends JFrame {
     private void editCourseFromRow(int row) {
         try {
             int id = getCourseIdAtRow(row);
-            Course course = courseDao.getCourseById(id);
+            Course course = controller.getCourseById(id);
             if (course == null) {
                 showWarning("Course not found for ID: " + id);
                 return;
@@ -214,7 +214,7 @@ public class CourseCrudFrame extends JFrame {
                 updatedCourse.setDepartmentName(null);
             }
 
-            boolean updated = courseDao.updateCourse(updatedCourse);
+            boolean updated = controller.updateCourse(updatedCourse);
             if (!updated) {
                 showWarning("No course updated. Check the ID.");
                 return;
@@ -238,7 +238,7 @@ public class CourseCrudFrame extends JFrame {
                 return;
             }
 
-            boolean deleted = courseDao.deleteCourse(id);
+            boolean deleted = controller.deleteCourse(id);
             if (!deleted) {
                 showWarning("No course deleted. Check the ID.");
                 return;
@@ -259,7 +259,7 @@ public class CourseCrudFrame extends JFrame {
 
     private void loadDepartments() {
         try {
-            List<Department> departments = courseDao.getDepartments();
+            List<Department> departments = controller.getDepartments();
             DefaultComboBoxModel<Department> model = new DefaultComboBoxModel<>();
             model.addElement(new Department(0, "No Department"));
             for (Department department : departments) {

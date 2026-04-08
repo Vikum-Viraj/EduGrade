@@ -28,18 +28,18 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-import dao.DepartmentDao;
+import controller.DepartmentController;
 import model.Department;
 
 public class DepartmentCrudFrame extends JFrame {
-    private final DepartmentDao departmentDao;
+    private final DepartmentController controller;
 
     private final JTextField nameField;
     private final DefaultTableModel tableModel;
     private final JTable table;
 
-    public DepartmentCrudFrame() {
-        this.departmentDao = new DepartmentDao();
+    public DepartmentCrudFrame(DepartmentController controller) {
+        this.controller = controller;
 
         setTitle("Department CRUD");
         setSize(780, 500);
@@ -107,7 +107,7 @@ public class DepartmentCrudFrame extends JFrame {
         }
 
         try {
-            int newId = departmentDao.createDepartment(name);
+            int newId = controller.createDepartment(name);
             showInfo("Department created with ID: " + newId);
             loadDepartments();
         } catch (SQLException ex) {
@@ -117,7 +117,7 @@ public class DepartmentCrudFrame extends JFrame {
 
     private void loadDepartments() {
         try {
-            List<Department> departments = departmentDao.getAllDepartments();
+            List<Department> departments = controller.getAllDepartments();
             tableModel.setRowCount(0);
             for (Department department : departments) {
                 tableModel.addRow(new Object[] { department.getDepartmentId(), department.getDepartmentName(), "Update", "Delete" });
@@ -130,7 +130,7 @@ public class DepartmentCrudFrame extends JFrame {
     private void editDepartmentFromRow(int row) {
         try {
             int id = getDepartmentIdAtRow(row);
-            Department department = departmentDao.getDepartmentById(id);
+            Department department = controller.getDepartmentById(id);
             if (department == null) {
                 showWarning("Department not found for ID: " + id);
                 return;
@@ -153,7 +153,7 @@ public class DepartmentCrudFrame extends JFrame {
                 return;
             }
 
-            boolean updated = departmentDao.updateDepartment(id, newName);
+            boolean updated = controller.updateDepartment(id, newName);
             if (!updated) {
                 showWarning("No department updated. Check the ID.");
                 return;
@@ -177,7 +177,7 @@ public class DepartmentCrudFrame extends JFrame {
                 return;
             }
 
-            boolean deleted = departmentDao.deleteDepartment(id);
+            boolean deleted = controller.deleteDepartment(id);
             if (!deleted) {
                 showWarning("No department deleted. Check the ID.");
                 return;

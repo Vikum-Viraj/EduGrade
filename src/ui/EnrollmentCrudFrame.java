@@ -31,14 +31,14 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import dao.EnrollmentDao;
+import controller.EnrollmentController;
 import model.Course;
 import model.Department;
 import model.Enrollment;
 import model.Student;
 
 public class EnrollmentCrudFrame extends JFrame {
-    private final EnrollmentDao enrollmentDao;
+    private final EnrollmentController controller;
 
     private final JTextField enrollmentDateField;
     private final JTextField gradeField;
@@ -47,8 +47,8 @@ public class EnrollmentCrudFrame extends JFrame {
     private final DefaultTableModel tableModel;
     private final JTable table;
 
-    public EnrollmentCrudFrame() {
-        this.enrollmentDao = new EnrollmentDao();
+    public EnrollmentCrudFrame(EnrollmentController controller) {
+        this.controller = controller;
 
         setTitle("Enrollment Management");
         setSize(1150, 620);
@@ -126,7 +126,7 @@ public class EnrollmentCrudFrame extends JFrame {
         }
 
         try {
-            int newId = enrollmentDao.createEnrollment(enrollment);
+            int newId = controller.createEnrollment(enrollment);
             showInfo("Enrollment created with ID: " + newId);
             loadEnrollments();
         } catch (SQLException ex) {
@@ -136,7 +136,7 @@ public class EnrollmentCrudFrame extends JFrame {
 
     private void loadEnrollments() {
         try {
-            List<Enrollment> enrollments = enrollmentDao.getAllEnrollments();
+            List<Enrollment> enrollments = controller.getAllEnrollments();
             tableModel.setRowCount(0);
             for (Enrollment enrollment : enrollments) {
                 tableModel.addRow(new Object[] {
@@ -158,7 +158,7 @@ public class EnrollmentCrudFrame extends JFrame {
     private void editEnrollmentFromRow(int row) {
         try {
             int id = getEnrollmentIdAtRow(row);
-            Enrollment enrollment = enrollmentDao.getEnrollmentById(id);
+            Enrollment enrollment = controller.getEnrollmentById(id);
             if (enrollment == null) {
                 showWarning("Enrollment not found for ID: " + id);
                 return;
@@ -216,7 +216,7 @@ public class EnrollmentCrudFrame extends JFrame {
             updatedEnrollment.setEnrollmentDate(enrollmentDate);
             updatedEnrollment.setGrade(emptyToNull(gradeInput.getText()));
 
-            boolean updated = enrollmentDao.updateEnrollment(updatedEnrollment);
+            boolean updated = controller.updateEnrollment(updatedEnrollment);
             if (!updated) {
                 showWarning("No enrollment updated. Check the ID.");
                 return;
@@ -240,7 +240,7 @@ public class EnrollmentCrudFrame extends JFrame {
                 return;
             }
 
-            boolean deleted = enrollmentDao.deleteEnrollment(id);
+            boolean deleted = controller.deleteEnrollment(id);
             if (!deleted) {
                 showWarning("No enrollment deleted. Check the ID.");
                 return;
@@ -263,14 +263,14 @@ public class EnrollmentCrudFrame extends JFrame {
         try {
             DefaultComboBoxModel<Student> studentModel = new DefaultComboBoxModel<>();
             studentModel.addElement(new Student(0, "Select Student", null, null, null, null, null, null));
-            for (Student student : enrollmentDao.getStudents()) {
+            for (Student student : controller.getStudents()) {
                 studentModel.addElement(student);
             }
             studentComboBox.setModel(studentModel);
 
             DefaultComboBoxModel<Course> courseModel = new DefaultComboBoxModel<>();
             courseModel.addElement(new Course(0, "Select Course", 0, null, null));
-            for (Course course : enrollmentDao.getCourses()) {
+            for (Course course : controller.getCourses()) {
                         courseModel.addElement(course);
             }
             courseComboBox.setModel(courseModel);

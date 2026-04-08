@@ -11,9 +11,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-public class DashboardFrame extends JFrame {
+import controller.DashboardController;
 
-    public DashboardFrame() {
+public class DashboardFrame extends JFrame {
+    private final DashboardController controller;
+
+    public DashboardFrame(DashboardController controller) {
+        this.controller = controller;
         setTitle("Edugrade Dashboard");
         setSize(700, 420);
         setLocationRelativeTo(null);
@@ -36,23 +40,23 @@ public class DashboardFrame extends JFrame {
 
         JButton departmentsButton = new JButton("Departments");
         departmentsButton.setFont(new Font("SansSerif", Font.BOLD, 20));
-        departmentsButton.addActionListener(e -> new DepartmentCrudFrame().setVisible(true));
+        departmentsButton.addActionListener(e -> this.controller.openDepartments());
 
         JButton studentsButton = new JButton("Students");
         studentsButton.setFont(new Font("SansSerif", Font.BOLD, 20));
-        studentsButton.addActionListener(e -> new StudentCrudFrame().setVisible(true));
+        studentsButton.addActionListener(e -> this.controller.openStudents());
 
         JButton lecturersButton = new JButton("Lecturers");
         lecturersButton.setFont(new Font("SansSerif", Font.BOLD, 20));
-        lecturersButton.addActionListener(e -> new LecturerCrudFrame().setVisible(true));
+        lecturersButton.addActionListener(e -> this.controller.openLecturers());
 
         JButton coursesButton = new JButton("Courses");
         coursesButton.setFont(new Font("SansSerif", Font.BOLD, 20));
-        coursesButton.addActionListener(e -> new CourseCrudFrame().setVisible(true));
+        coursesButton.addActionListener(e -> this.controller.openCourses());
 
         JButton enrollmentsButton = new JButton("Enrollments");
         enrollmentsButton.setFont(new Font("SansSerif", Font.BOLD, 20));
-        enrollmentsButton.addActionListener(e -> new EnrollmentCrudFrame().setVisible(true));
+        enrollmentsButton.addActionListener(e -> this.controller.openEnrollments());
 
         centerPanel.add(departmentsButton);
         centerPanel.add(studentsButton);
