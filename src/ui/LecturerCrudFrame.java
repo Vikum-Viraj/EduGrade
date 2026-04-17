@@ -298,6 +298,7 @@ public class LecturerCrudFrame extends JFrame {
             return null;
         }
 
+        //create lecturer object
         Lecturer lecturer = new Lecturer();
         lecturer.setName(name);
         lecturer.setEmail(emptyToNull(emailField.getText()));

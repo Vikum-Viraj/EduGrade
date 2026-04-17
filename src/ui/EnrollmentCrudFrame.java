@@ -33,7 +33,6 @@ import javax.swing.table.TableColumn;
 
 import controller.EnrollmentController;
 import model.Course;
-import model.Department;
 import model.Enrollment;
 import model.Student;
 

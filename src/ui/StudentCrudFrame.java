@@ -361,29 +361,6 @@ public class StudentCrudFrame extends JFrame {
         return student;
     }
 
-    private void populateForm(Student student) {
-        nameField.setText(student.getName());
-        emailField.setText(student.getEmail() == null ? "" : student.getEmail());
-        ageField.setText(student.getAge() == null ? "" : student.getAge());
-        addressField.setText(student.getAddress() == null ? "" : student.getAddress());
-        phoneField.setText(student.getPhone() == null ? "" : student.getPhone());
-
-        if (student.getDepartmentId() == null) {
-            departmentComboBox.setSelectedIndex(0);
-            return;
-        }
-
-        for (int i = 0; i < departmentComboBox.getItemCount(); i++) {
-            Department department = departmentComboBox.getItemAt(i);
-            if (department != null && department.getDepartmentId() == student.getDepartmentId()) {
-                departmentComboBox.setSelectedIndex(i);
-                return;
-            }
-        }
-
-        departmentComboBox.setSelectedIndex(0);
-    }
-
     private String emptyToNull(String value) {
         String trimmed = value == null ? "" : value.trim();
         return trimmed.isEmpty() ? null : trimmed;

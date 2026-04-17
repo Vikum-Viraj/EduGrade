@@ -69,8 +69,8 @@ public class DBConnection {
                     values.put(key, value);
                 }
             }
-        } catch (Exception ignored) {
-            // If .env cannot be read, fallback to system environment variables.
+        } catch (Exception e) {
+             throw new RuntimeException("Failed to load .env file", e);
         }
 
         return values;
